@@ -25,4 +25,22 @@ void free_list(List* a){
     delete_point(a->ponto);
     free(a);
 }
-Point** vetor_de_pontos(List* a);
+Point** vetor_de_pontos(List* a, int size){
+    Point** vetor = malloc(size*sizeof(double));
+    int i = 0;
+    List* aux = a;
+    while(aux->next !=NULL){
+        vetor[i] = aux->ponto;
+        aux = aux->next;
+        i++;
+    }
+    vetor[i] = aux->ponto;
+    return vetor;
+}
+void print_list(List* a,int dimension){
+    if(a == NULL)
+        return;
+    print_point(a->ponto,dimension);
+    print_list(a->next,dimension);
+
+}

@@ -8,6 +8,7 @@ typedef struct list{
 List* create_list(Point* a);
 void insert(List* list,Point* a);
 void free_list(List* a);
-Point** vetor_de_pontos(List* a);
+void print_list(List* a, int dimension);
+Point** vetor_de_pontos(List* a, int size);
 
 #endif

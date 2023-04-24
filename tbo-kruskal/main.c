@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include "point.h"
+#include "list.h"
+#include "file.h"
 
-
-int main(){
-    double vet[] = {1.2, 1.3, 1.4};
-    Point* a = create_point(3,"abc",vet);
-    print_point(a,3);
-    delete_point(a);
+int main(int argc, char** argv){
+    int dimension;
+    List* list = read_file(argv[1],&dimension);
+    print_list(list,dimension);
+    free_list(list);
     return 0;
 }
