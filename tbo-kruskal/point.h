@@ -14,5 +14,6 @@ Point* create_point(int dimension,char* name,double* vet);
 void delete_point(Point* a);
 double distance(Point* a, Point* b, int n );
 void print_point(Point* a, int n);
-
+double** distance_matrix(Point** a, int size,int dimension);
+void free_matrix(double** matrix,int size);
 #endif

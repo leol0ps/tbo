@@ -32,3 +32,29 @@ void print_point(Point* a, int n ){
     }
     printf("\n");
 }
+double** distance_matrix(Point** a,int size,int dimension){
+    double** matrix = malloc(size*sizeof(double*));
+    for(int i = 0 ; i < size; i++){
+        matrix[i] = malloc((i+1)*sizeof(double));
+    }
+    for(int i = 0; i < size; i++){
+        for(int j = 0; j < i; j++){
+            matrix[i][j] = distance(a[i],a[j],dimension);
+        }
+    }
+    return matrix;
+}
+void free_matrix(double** matrix,int size){
+    for(int i = 0; i < size; i++){
+        free(matrix[i]);
+    }
+    free(matrix);
+}
+void print_matrix(double** matrix,int size){
+    for(int i = 0; i < size; i++){
+        for(int j = 0; j < i; j++){
+            printf("matrix[%d][%d] = %lf\n", i,j,matrix[i][j]);
+        }
+        printf("\n");
+    }
+}

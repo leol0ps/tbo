@@ -37,6 +37,9 @@ Point** vetor_de_pontos(List* a, int size){
     vetor[i] = aux->ponto;
     return vetor;
 }
+void free_vetor_de_pontos(Point** a){
+    free(a);
+}
 void print_list(List* a,int dimension){
     if(a == NULL)
         return;
