@@ -27,7 +27,6 @@ List* read_file(char* path, int* dimension,int* lines){
     name = strtok(line,",");
     aux = name;
     while (aux != NULL && i < number_of_arguments){
-        printf ("%s\n",aux);
         aux = strtok (NULL, ",");
         posit[i] = atof(aux);
         i++;
