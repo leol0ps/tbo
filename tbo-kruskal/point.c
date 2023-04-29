@@ -26,7 +26,7 @@ void delete_point(Point* a){
     free(a);
 }
 void print_point(Point* a, int n ){
-    printf("%s ", a->name);
+    printf("name:%s, group:%d ", a->name,a->group);
     for(int i = 0; i < n; i++){
         printf("%lf ", a->dim[i]);
     }
@@ -57,4 +57,83 @@ void print_matrix(double** matrix,int size){
         }
         printf("\n");
     }
+}
+void write_group(Point** a,int size,int* groups){
+    for(int i = 0; i < size; i++){
+        a[i]->group = groups[i];
+    }
+}
+void print_point_name(Point* a){
+    printf("%s",a->name);
+}
+int compare_str(const void * a, const void * b) {
+    Point* x = *(Point**)a;
+    Point* y = *(Point**)b;
+   return strcmp(x->name,y->name);
+}
+void sort_point_by_name(Point** a, int size){
+    qsort(a,size,sizeof(Point*),compare_str);
+}
+int compare_group(const void* a, const void * b){
+    Point* x = *(Point**)a;
+    Point* y = *(Point**)b;
+    return x->group-y->group;
+}
+void sort_point_by_group(Point** a, int size){
+    qsort(a,size,sizeof(Point*),compare_group);
+}
+typedef struct group{
+    int begin;
+    int end;
+    int name;
+    char* first;
+}Group;
+Group* create_group(int start,int end,int name,char* first){
+    Group* new_group = malloc(sizeof(Group));
+    new_group->begin = start;
+    new_group->end = end;
+    new_group->name = name;
+    new_group->first = first;
+    return new_group;
+}
+void free_group(Group* a){
+    free(a);
+}
+int order_groups(const void* a, const void * b){
+    Group* x = *(Group**)a;
+    Group* y = *(Group**)b;
+    return strcmp((x->first),(y->first));
+}
+void print_group_points(Group* a, Point** vetor){
+    for(int i = a->begin; i <= a->end;i++){
+        print_point_name(vetor[i]);
+    }
+}
+void print_to_file(Point** vetor,int size,int k){
+    Group** grupos = malloc(k*sizeof(Group*));
+    sort_point_by_group(vetor,size);
+    int i = 0;
+    int last = 0;
+    Point** ponteiro;
+    int aux = vetor[0]->group;
+    for(int j = 0; j < size;j++){
+        if(vetor[j]->group!=aux){
+            aux = vetor[j]->group;
+            ponteiro = &vetor[j-1];
+            grupos[i++] = create_group(last,(j-1),vetor[j-1]->group,vetor[j-1]->name);
+            sort_point_by_name(ponteiro,(j-last));
+            last = j;
+        }
+    }
+    ponteiro = &vetor[last]; 
+    sort_point_by_name(ponteiro,size-last-1);
+    grupos[i++] = create_group(last,(size-1),vetor[last]->group,vetor[last]->name);
+    qsort(grupos,sizeof(Group*),k,order_groups);
+    for(int j = 0; j < k; j++){
+        print_group_points(grupos[j],vetor);
+    }
+    for(int j = 0; j < k ; j++){
+        free_group(grupos[j]);
+    }
+    free(grupos);
 }
