@@ -19,4 +19,5 @@ double** distance_matrix(Point** a, int size,int dimension);
 void free_matrix(double** matrix,int size);
 void print_point_name(Point* a);
 void sort_point_by_group(Point** a, int size);
+void print_to_file(Point** vetor,int size,int k);
 #endif
