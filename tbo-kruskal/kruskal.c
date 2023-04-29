@@ -39,7 +39,7 @@ Edge** cria_vetor_arestas(double** matrix, int dimension, int* edge_array_size){
             count++;
         }
     }
-    printf("count %d\n",count);
+    //printf("count %d\n",count);
     return vetor;
 }
 
@@ -80,7 +80,7 @@ int* kruskal(Edge** arestas, int size_aresta,int size_mst,int k){
             j++;
         }
     }
-    print_arestas(arestas,size_aresta);
+    //print_arestas(arestas,size_aresta);
     free(number_of_elements);
     return mst;
 }

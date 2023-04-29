@@ -130,7 +130,7 @@ void print_to_file(Point** vetor,int size,int k){
         }
     }
     ponteiro = &vetor[last]; 
-    sort_point_by_name(ponteiro,size-last-1);
+    sort_point_by_name(ponteiro,size-last);
     //qsort(grupos,sizeof(Group*),k,order_groups);
     grupos[i]= create_group(last,(size-1),vetor[last]->group,&vetor[last]->name);
         for(int j = 0; j < k; j++){
