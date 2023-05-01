@@ -86,24 +86,30 @@ typedef struct group{
     int begin;
     int end;
     int name;
-    char** first;
+    char* first;
 }Group;
-Group* create_group(int start,int end,int name,char** first){
+Group* create_group(int start,int end,int name,char* first){
     Group* new_group = malloc(sizeof(Group));
     new_group->begin = start;
     new_group->end = end;
     new_group->name = name;
-    new_group->first = first;
+    int strsize = strlen(first);
+
+    new_group->first = malloc((strsize+1)*sizeof(char));
+    strcpy(new_group->first,first);
     return new_group;
 }
 void free_group(Group* a){
+    if(a==NULL)
+        return;
+    free(a->first);
     free(a);
 }
 int order_groups(const void* a, const void * b){
     Group* x = *(Group**)a;
     Group* y = *(Group**)b;
     //return x->name-y->name;
-    return strcmp(*(x->first),(*y->first));
+    return strcmp(x->first,y->first);
 }
 void print_group_points(Group* a, Point** vetor){
     for(int i = a->begin; i < a->end;i++){
@@ -124,15 +130,15 @@ void print_to_file(Point** vetor,int size,int k){
         if(vetor[j]->group!=aux){
             ponteiro = &vetor[last];
             sort_point_by_name(ponteiro,(j-last));
-            grupos[i++] = create_group(last,(j-1),aux,&vetor[last]->name);
+            grupos[i++] = create_group(last,(j-1),aux,vetor[last]->name);
             aux = vetor[j]->group;
             last = j;
         }
     }
     ponteiro = &vetor[last]; 
     sort_point_by_name(ponteiro,size-last);
-    //qsort(grupos,sizeof(Group*),k,order_groups);
-    grupos[i]= create_group(last,(size-1),vetor[last]->group,&vetor[last]->name);
+    grupos[i]= create_group(last,(size-1),vetor[last]->group,vetor[last]->name);
+    qsort(grupos,k,sizeof(Group*),order_groups);
         for(int j = 0; j < k; j++){
         print_group_points(grupos[j],vetor);
     }
