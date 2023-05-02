@@ -63,8 +63,8 @@ void write_group(Point** a,int size,int* groups){
         a[i]->group = groups[i];
     }
 }
-void print_point_name(Point* a){
-    printf("%s",a->name);
+void print_point_name_to_file(Point* a,FILE* out){
+    fprintf(out,"%s",a->name);
 }
 int compare_str(const void * a, const void * b) {
     Point* x = *(Point**)a;
@@ -111,36 +111,40 @@ int order_groups(const void* a, const void * b){
     //return x->name-y->name;
     return strcmp(x->first,y->first);
 }
-void print_group_points(Group* a, Point** vetor){
+void print_group_points(Group* a, Point** vetor,FILE* out){
     for(int i = a->begin; i < a->end;i++){
-        print_point_name(vetor[i]);
-        printf(",");
+        print_point_name_to_file(vetor[i],out);
+        fprintf(out,",");
     }
-    print_point_name(vetor[a->end]);
-    printf("\n");
+    print_point_name_to_file(vetor[a->end],out);
+    fprintf(out,"\n");
 }
-void print_to_file(Point** vetor,int size,int k){
+void print_to_file(Point** vetor,int size,int k,FILE* out){
     Group** grupos = malloc(k*sizeof(Group*));
     sort_point_by_group(vetor,size);
     int i = 0;
     int last = 0;
     Point** ponteiro;
     int aux = vetor[0]->group;
-    for(int j = 0; j < size;j++){
+    for(int j = 0; j < size  && i < (k-1) ; j++){
         if(vetor[j]->group!=aux){
             ponteiro = &vetor[last];
-            sort_point_by_name(ponteiro,(j-last));
+            if(j-last>0){
+            	sort_point_by_name(ponteiro,(j-last));
+            }
             grupos[i++] = create_group(last,(j-1),aux,vetor[last]->name);
             aux = vetor[j]->group;
             last = j;
         }
     }
     ponteiro = &vetor[last]; 
-    sort_point_by_name(ponteiro,size-last);
-    grupos[i]= create_group(last,(size-1),vetor[last]->group,vetor[last]->name);
+    if(size-last > 0){
+    	sort_point_by_name(ponteiro,size-last);
+    }
+    grupos[i] = create_group(last,(size-1),vetor[last]->group,vetor[last]->name);
     qsort(grupos,k,sizeof(Group*),order_groups);
         for(int j = 0; j < k; j++){
-        print_group_points(grupos[j],vetor);
+        print_group_points(grupos[j],vetor,out);
     }
     for(int j = 0; j < k ; j++){
         free_group(grupos[j]);
